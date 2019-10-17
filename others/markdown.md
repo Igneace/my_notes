@@ -116,6 +116,4 @@ print(a)
 
 </font>  
 <table><tr><td bgcolor = blue>背景色</td></tr></table>  
-dasd
-asd
-asd
+

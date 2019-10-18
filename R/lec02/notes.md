@@ -71,6 +71,7 @@
 
 ```
 # lapply,vapply
+> <font face = '楷体' color = 'red' size = 4>apply家族函数详见附录</font>
 ## lapply
 >&#10052;lapply将函数应用到list的每个元素中
 ```
@@ -84,3 +85,15 @@
 [[2]]
 [1] 7
 ```
+## vapply
+```
+> vapply(z, summary, FUN.VALUE = numeric(6))
+            [,1] [,2]
+Min.    2.000000    7
+1st Qu. 2.500000    7
+Median  3.000000    7
+Mean    2.666667    7
+3rd Qu. 3.000000    7
+Max.    3.000000    7
+```
+

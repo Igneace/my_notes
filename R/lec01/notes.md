@@ -70,4 +70,76 @@ paste(colors, "flowers")
 [1] "red flowers" "yellow flowers" "blue flowers"
 ```
 # Factors
+## 创建
+```
+> grp <- factor(c("control","treatment","control","treatment"))
+> grp
+[1] control   treatment control   treatment
+Levels: control treatment
+```
+## levels的用法
+```
+> as.integer(grp)
+[1] 1 2 1 2
 
+#标签查询
+> levels(grp)
+[1] "control"   "treatment"
+> levels(grp)[as.integer(grp)]                           
+[1] "control"   "treatment" "control"   "treatment"
+#更改标签
+> levels(grp)[1] <- "placebo"                            
+> grp
+[1] placebo   treatment placebo   treatment
+Levels: placebo treatment
+```
+## 矩阵与数组
+### 矩阵创建
+```
+> m <- matrix(1:6,nrow =2,ncol =3)
+> m
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
+```
+### 矩阵查询
+```
+> m[2,3]
+[1] 6
+> m[1,]
+[1] 1 3 5
+> m[,2]
+[1] 3 4
+
+```
+### 数组创建
+```
+> a <- array(1:24, c(3,4,2))
+> a
+, , 1
+
+     [,1] [,2] [,3] [,4]
+[1,]    1    4    7   10
+[2,]    2    5    8   11
+[3,]    3    6    9   12
+
+, , 2
+
+     [,1] [,2] [,3] [,4]
+[1,]   13   16   19   22
+[2,]   14   17   20   23
+[3,]   15   18   21   24
+```
+### 数组查询
+```
+> a[1,2,2]
+[1] 16
+> a[1,1,]
+[1]  1 13
+> a[1,,]
+     [,1] [,2]
+[1,]    1   13
+[2,]    4   16
+[3,]    7   19
+[4,]   10   22
+```

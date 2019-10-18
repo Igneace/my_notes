@@ -70,7 +70,7 @@
 [1] "a"  "bc"
 
 ```
-# lapply,vapply
+# apply家族函数
 > <font face = '楷体' color = 'red' size = 4>apply家族函数详见附录</font>
 ## lapply
 >&#10052;lapply将函数应用到list的每个元素中
@@ -95,5 +95,50 @@ Median  3.000000    7
 Mean    2.666667    7
 3rd Qu. 3.000000    7
 Max.    3.000000    7
+```
+## sapply
+```
+> head(iris)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa
+> sapply(iris[,1:4], mean)
+Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+    5.843333     3.057333     3.758000     1.199333 
+```
+## tapply
+> &#10084;tapply(vector, index, function)<br>
+> &#10084;分组统计；function作用于vector，group by index
+
+```
+> head(iris)
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa
+> tapply(iris$Sepal.Width, iris$Species, mean)
+    setosa versicolor  virginica 
+     3.428      2.770      2.974 
+```
+```
+> head(warpbreaks)
+  breaks wool tension
+1     26    A       L
+2     30    A       L
+3     54    A       L
+4     25    A       L
+5     70    A       L
+6     52    A       L
+> tapply(warpbreaks$breaks,list(warpbreaks$wool,warpbreaks$tension),median)
+   L  M  H
+A 51 21 24
+B 29 28 17
 ```
 

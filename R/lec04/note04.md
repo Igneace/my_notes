@@ -196,3 +196,32 @@ In ks.test(trees$Height, "pnorm", 76, 6.3) :
   Kolmogorov - Smirnov检验里不应该有连结
 ```
 ## t.test()
+```
+> t.test(trees$Height)
+
+	One Sample t-test
+
+data:  trees$Height
+t = 66.41, df = 30, p-value < 2.2e-16
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 73.6628 78.3372
+sample estimates:
+mean of x 
+       76 
+```
+## Monte Carlo模拟
+## 产生伪随机数(均匀分布)
+- runif(n, min = a, max = b) 模拟独立均匀分布随机变量
+- 缺省值a = 0，b = 1
+```
+> runif(5)
+[1] 0.1780497 0.5446209 0.6015979 0.8241860 0.3242714
+```
+```
+> runif(10,min=-1,max = 1)
+ [1] -0.88299061  0.91140626  0.55537714  0.09843378
+ [5] -0.79852980  0.60396286  0.10233457  0.58348982
+ [9]  0.78739166  0.68024201
+```
+

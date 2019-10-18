@@ -30,7 +30,7 @@ fuc <- function(a,b){
 ```
 # 应用案例
 
-##求小于n的质数
+## 求小于n的质数
 ```
 prime_fc <- function(n){
   sieve <- seq(2,n)
@@ -46,3 +46,16 @@ prime_fc <- function(n){
 }
 
 ```
+## Newton寻根迭代
+- 求$f(x)=x^{3} + 2*x^{2} - 7$的根
+```
+f <- x^3 + 2*x^2 -7
+tolerance <- 0.0001
+while (abs(f) > tolerance){
+  f.prime <- 3*x^2 + 4*x
+  x <- x - f/f.prime
+  f <- x^3 + 2*x^2 -7
+}
+x
+```
+

@@ -380,15 +380,218 @@ blockquote {
 <blockquote>
 <p>☂Author: chenshuo</p>
 </blockquote>
-<h1 id="%E7%BB%98%E5%9B%BE">绘图</h1>
+<h1 id="r%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8">R中的数据存储</h1>
+<p>二进制，0.8无法精确表示</p>
+<p>0.8<em>2=1.6  取1<br>0.6</em>2=1.2  取1<br>0.2<em>2=0.4 取0<br>0.4</em>2=0.8 取0 <br>0.8表示成 0.1100<br></p>
+<h1 id="%E9%80%BB%E8%BE%91%E5%90%91%E9%87%8F%E5%81%9A%E7%B4%A2%E5%BC%95">逻辑向量做索引</h1>
+<pre class="hljs"><code><div>&gt; a &lt;- c(TRUE,FALSE,FALSE,FALSE,TRUE)
+&gt; b &lt;- c(13,7,8,2)
+&gt; b[a]
+[1] 13 NA
+</div></code></pre>
+<pre class="hljs"><code><div>&gt; a &lt;- c(3,6,9)
+&gt; a[a&gt;6]
+[1] 9
+&gt; b &lt;- c(-1,8,3)
+&gt; b[b&gt;a]
+[1] 8
+</div></code></pre>
+<h1 id="dataframe">DataFrame</h1>
+<h2 id="%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C">常用操作</h2>
+<pre class="hljs"><code><div>&gt; head(women,3)             #head
+  height weight
+1     58    115
+2     59    117
+3     60    120
+&gt; tail(women,3)             #tail
+   height weight
+13     70    154
+14     71    159
+15     72    164
+&gt; nrow(women)               #nrow
+[1] 15
+&gt; ncol(women)               #ncol
+[1] 2
+&gt; dim(women)                #dim
+[1] 15  2
+&gt; str(women)
+'data.frame':	15 obs. of  2 variables:
+ $ height: num  58 59 60 61 62 63 64 65 66 67 ...
+ $ weight: num  115 117 120 123 126 129 132 135 139 142 ...
+</div></code></pre>
+<h2 id="%E6%9F%A5%E8%AF%A2">查询</h2>
+<pre class="hljs"><code><div>&gt; women[2,2]
+[1] 117
+&gt; women[2,]
+  height weight
+2     59    117
+&gt; women[1:3,1]
+[1] 58 59 60
+</div></code></pre>
+<pre class="hljs"><code><div>&gt; women$weight
+[1] 115 117 120 123 126 129 132 135 139 142 146 150 154 159 164
+</div></code></pre>
+<pre class="hljs"><code><div>&gt; women$height[women$weight&gt;140]        
+[1] 67 68 69 70 71 72
+</div></code></pre>
+<h1 id="list">List</h1>
+<blockquote>
+<p>❄list可以存放长度不同的列<br>
+❄dataframe只能存放长度相同的列</p>
+</blockquote>
+<pre class="hljs"><code><div>&gt; x &lt;- c(3,2,3)
+&gt; y &lt;- c(&quot;a&quot;,&quot;bc&quot;)
+&gt; z &lt;- list(x,y)
+&gt; z
+[[1]]
+[1] 3 2 3
+
+[[2]]
+[1] &quot;a&quot;  &quot;bc&quot;
+
+</div></code></pre>
+<h1 id="font-color-redapply%E5%AE%B6%E6%97%8F%E5%87%BD%E6%95%B0font"><font color = 'red'><strong>apply家族函数</strong></font></h1>
+<blockquote>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/R/apply.png" alt="apply functions"></p>
+</blockquote>
+<h2 id="apply">apply</h2>
 <ul>
-<li>参数太多懒得写</li>
+<li>apply(X, MARGIN, FUN, ...)</li>
+<li>行或列遍历操作</li>
+<li>X ：array（包括matrix）</li>
+<li>MARGIN = 1按行操作<br>MARGIN = 2按列操作</li>
+<li>返回类型 vector</li>
 </ul>
-<h1 id="%E7%AE%80%E5%8D%95%E7%BB%9F%E8%AE%A1">简单统计</h1>
-<h2 id="aggregate">aggregate</h2>
+<pre class="hljs"><code><div>&gt; a &lt;- matrix(1:12,c(3,4))
+&gt; a
+     [,1] [,2] [,3] [,4]
+[1,]    1    4    7   10
+[2,]    2    5    8   11
+[3,]    3    6    9   12
+</div></code></pre>
+<p>MARGIN = 1</p>
+<pre class="hljs"><code><div>&gt; aa &lt;- apply(a,1,sum)
+[1] 22 26 30
+</div></code></pre>
+<p>返回类型vector</p>
+<pre class="hljs"><code><div>&gt; is.vector(aa)        
+[1] TRUE
+</div></code></pre>
+<p>MARGIN = 2</p>
+<pre class="hljs"><code><div>&gt; apply(a,2,sum)
+[1]  6 15 24 33
+</div></code></pre>
+<h2 id="lapply">lapply</h2>
 <ul>
-<li>分组统计</li>
-<li>aggregate(a~b,dataset,function)<br>按dataset中的b分组，用function对a进行统计</li>
+<li>lapply(list, function, ...)</li>
+<li>列表遍历，按列操作</li>
+<li>输入的数据必须是List/datafram<br>返回List</li>
+</ul>
+<p>构造dataframe: a_df</p>
+<pre class="hljs"><code><div>&gt; a
+     [,1] [,2] [,3] [,4]
+[1,]    1    4    7   10
+[2,]    2    5    8   11
+[3,]    3    6    9   12
+&gt; a_df &lt;- data.frame(a)
+&gt; a_df
+  X1 X2 X3 X4
+1  1  4  7 10
+2  2  5  8 11
+3  3  6  9 12
+</div></code></pre>
+<p>输入类型list/dataframe</p>
+<pre class="hljs"><code><div>&gt; is.list(a_df)       
+[1] TRUE
+&gt; is.data.frame(a_df)
+[1] TRUE
+</div></code></pre>
+<p>lapply对列操作</p>
+<pre class="hljs"><code><div>&gt; y &lt;- lapply(a_df, function(x) sum(x))
+&gt; y
+$X1
+[1] 6
+
+$X2
+[1] 15
+
+$X3
+[1] 24
+
+$X4
+[1] 33
+</div></code></pre>
+<p>lapply返回类型list</p>
+<pre class="hljs"><code><div>&gt; is.list(y)          
+[1] TRUE
+</div></code></pre>
+<h2 id="sapply">sapply</h2>
+<ul>
+<li>sapply(list, function, ..., simplify)</li>
+<li>simplify=F：返回值的类型是list，此时与lapply完全相同</li>
+<li>simplify=T（默认值）：返回值的类型由计算结果定。<br>如果函数返回值长度为1，则sapply将list简化为vector；<br>如果返回的列表中每个元素的长度都大于1且长度相同，那么sapply将其简化位一个矩阵</li>
+</ul>
+<pre class="hljs"><code><div>&gt; a_df
+  X1 X2 X3 X4
+1  1  4  7 10
+2  2  5  8 11
+3  3  6  9 12
+&gt; yy &lt;- sapply(a_df, function(x) sum(x))
+&gt; yy
+X1 X2 X3 X4 
+ 6 15 24 33 
+</div></code></pre>
+<p>simplify = FALSE，返回值长度为1，简化为vector</p>
+<pre class="hljs"><code><div>&gt; is.list(yy)
+[1] FALSE
+&gt; is.vector(yy)
+[1] TRUE
+</div></code></pre>
+<p>simplify = FALSE时等价于lapply,返回list</p>
+<pre class="hljs"><code><div>&gt; yy_F &lt;- sapply(a_df, function(x) sum(x), simplify = F)    
+&gt; yy_F
+$X1
+[1] 6
+
+$X2
+[1] 15
+
+$X3
+[1] 24
+
+$X4
+[1] 33
+
+&gt; is.list(yy_F)
+[1] TRUE
+</div></code></pre>
+<h2 id="vapply">vapply</h2>
+<ul>
+<li>vapply(X, FUN, FUN.VALUE, ..., USE.NAMES = TRUE)</li>
+<li>FUN作用于X后返回值长度和类型必须和FUN.VALUE一致，其余与sapply类似</li>
+<li>更安全</li>
+</ul>
+<pre class="hljs"><code><div>&gt; a_df
+  X1 X2 X3 X4
+1  1  4  7 10
+2  2  5  8 11
+3  3  6  9 12
+</div></code></pre>
+<p>numeric(2) 不匹配，报错</p>
+<pre class="hljs"><code><div>&gt; vapply(a_df, function(x) sum(x),numeric(2))
+Error in vapply(a_df, function(x) sum(x), numeric(2)) : 
+  values must be length 2,
+ but FUN(X[[1]]) result is length 1
+</div></code></pre>
+<p>numeric(1)</p>
+<pre class="hljs"><code><div>&gt; vapply(a_df, function(x) sum(x),numeric(1))
+X1 X2 X3 X4 
+ 6 15 24 33 
+</div></code></pre>
+<h2 id="tapply">tapply</h2>
+<ul>
+<li>tapply(vector, index, function)<br></li>
+<li>分组统计；function作用于vector，group by index</li>
 </ul>
 <pre class="hljs"><code><div>&gt; head(iris)
   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
@@ -398,204 +601,22 @@ blockquote {
 4          4.6         3.1          1.5         0.2  setosa
 5          5.0         3.6          1.4         0.2  setosa
 6          5.4         3.9          1.7         0.4  setosa
+&gt; tapply(iris$Sepal.Width, iris$Species, mean)
+    setosa versicolor  virginica 
+     3.428      2.770      2.974 
 </div></code></pre>
-<pre class="hljs"><code><div>&gt; aggregate(Sepal.Width~Species,iris,mean)
-     Species Sepal.Width
-1     setosa       3.428
-2 versicolor       2.770
-3  virginica       2.974
-</div></code></pre>
-<ul>
-<li>aggregate(cbind(a,b)~c,dataset,function)<br>按dataset中的c列进行分组，用function对a，b两列分别统计</li>
-</ul>
-<pre class="hljs"><code><div>&gt; head(iris)
-  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-1          5.1         3.5          1.4         0.2  setosa
-2          4.9         3.0          1.4         0.2  setosa
-3          4.7         3.2          1.3         0.2  setosa
-4          4.6         3.1          1.5         0.2  setosa
-5          5.0         3.6          1.4         0.2  setosa
-6          5.4         3.9          1.7         0.4  setosa
-</div></code></pre>
-<pre class="hljs"><code><div>&gt; aggregate(cbind(Sepal.Width,Sepal.Length)~Species,iris,mean)
-     Species Sepal.Width Sepal.Length
-1     setosa       3.428        5.006
-2 versicolor       2.770        5.936
-3  virginica       2.974        6.588
-</div></code></pre>
-<h2 id="cov%E5%8D%8F%E6%96%B9%E5%B7%AE">cov()协方差</h2>
-<ul>
-<li>cov(a,b)： a，b两列的协方差</li>
-<li>cov()也可计算协方差矩阵</li>
-</ul>
-<pre class="hljs"><code><div>&gt; head(trees)
-  Girth Height Volume
-1   8.3     70   10.3
-2   8.6     65   10.3
-3   8.8     63   10.2
-4  10.5     72   16.4
-5  10.7     81   18.8
-6  10.8     83   19.7
-</div></code></pre>
-<p>计算两列协方差</p>
-<pre class="hljs"><code><div>&gt; cov(trees$Height,trees$Volume)
-[1] 62.66
-</div></code></pre>
-<p>计算协方差矩阵</p>
-<pre class="hljs"><code><div>&gt; cov(trees)
-           Girth   Height    Volume
-Girth   9.847914 10.38333  49.88812
-Height 10.383333 40.60000  62.66000
-Volume 49.888118 62.66000 270.20280
-</div></code></pre>
-<h2 id="cor%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0">cor()相关系数</h2>
-<pre class="hljs"><code><div>&gt; head(trees)
-  Girth Height Volume
-1   8.3     70   10.3
-2   8.6     65   10.3
-3   8.8     63   10.2
-4  10.5     72   16.4
-5  10.7     81   18.8
-6  10.8     83   19.7
-</div></code></pre>
-<pre class="hljs"><code><div>&gt; cor(trees$Girth,trees$Volume,method = &quot;spearman&quot;)
-[1] 0.9547151
-</div></code></pre>
-<pre class="hljs"><code><div>&gt; cor(trees,method = &quot;spearman&quot;)
-           Girth    Height    Volume
-Girth  1.0000000 0.4408387 0.9547151
-Height 0.4408387 1.0000000 0.5787101
-Volume 0.9547151 0.5787101 1.0000000
-</div></code></pre>
-<h2 id="cortest">cor.test()</h2>
-<ul>
-<li>假设检验补充知识:<br>
- p值为原假设为真时，样本观察结果出现的概率<br> p值越小，拒绝原假设的理由越充分<br> p值可以反映决策风险度</li>
-<li>cor.test()的原假设为cor=0</li>
-</ul>
-<h3 id="p-value-22e-16brcor-09671194">p-value &lt; 2.2e-16<br>cor = 0.9671194</h3>
-<pre class="hljs"><code><div>&gt; cor.test(trees$Volume,trees$Girth)
-
-	Pearson's product-moment correlation
-
-data:  trees$Volume and trees$Girth
-t = 20.478, df = 29, p-value &lt; 2.2e-16
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- 0.9322519 0.9841887
-sample estimates:
-      cor 
-0.9671194 
-</div></code></pre>
-<h3 id="method-spearman">method = &quot;spearman&quot;</h3>
-<pre class="hljs"><code><div>&gt; cor.test(trees$Volume,trees$Girth,method = &quot;spearman&quot;)
-
-	Spearman's rank correlation rho
-
-data:  trees$Volume and trees$Girth
-S = 224.61, p-value &lt; 2.2e-16
-alternative hypothesis: true rho is not equal to 0
-sample estimates:
-      rho 
-0.9547151 
-
-Warning message:
-In cor.test.default(trees$Volume, trees$Girth, method = &quot;spearman&quot;) :
-  无法给连结计算精確p值
-</div></code></pre>
-<h3 id="p-value-0002758cor-05192801">p-value = 0.002758;cor = 0.5192801</h3>
-<pre class="hljs"><code><div>&gt; cor.test(trees$Girth,trees$Height)
-
-	Pearson's product-moment correlation
-
-data:  trees$Girth and trees$Height
-t = 3.2722, df = 29, p-value = 0.002758
-alternative hypothesis: true correlation is not equal to 0
-95 percent confidence interval:
- 0.2021327 0.7378538
-sample estimates:
-      cor 
-0.5192801 
-
-</div></code></pre>
-<h2 id="shapiro-wilk-test">Shapiro-Wilk test</h2>
-<ul>
-<li>用于检验数据是否为正态分布</li>
-<li>原假设是满足正态分布</li>
-<li>若p &gt; 0.05，在5%显著水平下，不能拒绝原假设</li>
-<li>若p &lt; 0.05，在5%显著水平下，拒绝原假设</li>
-</ul>
-<pre class="hljs"><code><div>&gt; shapiro.test(trees$Height)
-
-	Shapiro-Wilk normality test
-
-data:  trees$Height
-W = 0.96545, p-value = 0.4034
-</div></code></pre>
-<h2 id="kolmogorov-smirnov-test">Kolmogorov-Smirnov Test</h2>
-<ul>
-<li>单样本ks检验，检验样本是否来自特定分布。原假设是来自该分布</li>
-<li>双样本ks检验，检验两个样本是否服从同意分布。原假设是来自同一分布</li>
-</ul>
-<h3 id="treesheight%E4%B8%8D%E6%BB%A1%E8%B6%B3n10010">trees$Height不满足N(100,10)</h3>
-<pre class="hljs"><code><div>&gt; ks.test(trees$Height,&quot;pnorm&quot;,100,10)
-
-	One-sample Kolmogorov-Smirnov test
-
-data:  trees$Height
-D = 0.9032, p-value &lt; 2.2e-16
-alternative hypothesis: two-sided
-
-Warning message:
-In ks.test(trees$Height, &quot;pnorm&quot;, 100, 10) :
-  Kolmogorov - Smirnov检验里不应该有连结
-</div></code></pre>
-<h3 id="treesheight-mean-76-sd-637">trees$Height: mean = 76; sd = 6.37</h3>
-<pre class="hljs"><code><div>&gt; mean(trees$Height)
-[1] 76
-&gt; sd(trees$Height)
-[1] 6.371813
-</div></code></pre>
-<h3 id="treesheight-n7663">trees$Height ~N(76,6.3)</h3>
-<pre class="hljs"><code><div>&gt; ks.test(trees$Height,&quot;pnorm&quot;,76,6.3)
-
-	One-sample Kolmogorov-Smirnov test
-
-data:  trees$Height
-D = 0.12436, p-value = 0.7239
-alternative hypothesis: two-sided
-
-Warning message:
-In ks.test(trees$Height, &quot;pnorm&quot;, 76, 6.3) :
-  Kolmogorov - Smirnov检验里不应该有连结
-</div></code></pre>
-<h2 id="ttest">t.test()</h2>
-<pre class="hljs"><code><div>&gt; t.test(trees$Height)
-
-	One Sample t-test
-
-data:  trees$Height
-t = 66.41, df = 30, p-value &lt; 2.2e-16
-alternative hypothesis: true mean is not equal to 0
-95 percent confidence interval:
- 73.6628 78.3372
-sample estimates:
-mean of x 
-       76 
-</div></code></pre>
-<h2 id="monte-carlo%E6%A8%A1%E6%8B%9F">Monte Carlo模拟</h2>
-<h2 id="%E4%BA%A7%E7%94%9F%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%9D%87%E5%8C%80%E5%88%86%E5%B8%83">产生伪随机数(均匀分布)</h2>
-<ul>
-<li>runif(n, min = a, max = b) 模拟独立均匀分布随机变量</li>
-<li>缺省值a = 0，b = 1</li>
-</ul>
-<pre class="hljs"><code><div>&gt; runif(5)
-[1] 0.1780497 0.5446209 0.6015979 0.8241860 0.3242714
-</div></code></pre>
-<pre class="hljs"><code><div>&gt; runif(10,min=-1,max = 1)
- [1] -0.88299061  0.91140626  0.55537714  0.09843378
- [5] -0.79852980  0.60396286  0.10233457  0.58348982
- [9]  0.78739166  0.68024201
+<pre class="hljs"><code><div>&gt; head(warpbreaks)
+  breaks wool tension
+1     26    A       L
+2     30    A       L
+3     54    A       L
+4     25    A       L
+5     70    A       L
+6     52    A       L
+&gt; tapply(warpbreaks$breaks,list(warpbreaks$wool,warpbreaks$tension),median)
+   L  M  H
+A 51 21 24
+B 29 28 17
 </div></code></pre>
 
 </body>

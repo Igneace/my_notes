@@ -378,14 +378,14 @@ blockquote {
 </head>
 <body>
 <blockquote>
-<p>❤Author: chenshuo</p>
+<p>☂Author: chenshuo</p>
 </blockquote>
 <h1 id="%E6%A8%A1%E6%8B%9F%E5%85%B6%E4%BB%96%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F">模拟其他随机变量</h1>
 <blockquote>
-<p>R语言中提供了四类有关统计分布的函数（密度函数，累计分布函数，分位函数，随机数函数）。分别在代表该分布的R函数前加上相应前缀获得(d，p，q，r)。如：<br>
-1）正态分布的函数是norm，命令dnorm(0)就可以获得正态分布的密度函数在0处的值(0.3989)(默认为标准正态分布)。<br>
-2）pnorm(0)是0.5就是正态分布的累计密度函数在0处的值。<br>
-3）qnorm(0.5)则得到的是0，即标准正态分布在0.5处的分位数是0（在来个比较常用的：qnorm(0.975)就是那个估计中经常用到的1.96了）。<br>
+<p>R语有四类有关统计分布的函数（概率密度函数Density，分布函数Probility，分位函数Quantile，随机数函数Random）。分别在代表该分布的R函数前加上相应前缀获得(d，p，q，r)。如：<br>
+1）正态分布的函数是norm，dnorm(0)就可以获得正态分布的密度函数在0处的值(0.3989)(默认为标准正态分布)。<br>
+2）pnorm(0)是p(x&lt;=0)的值。<br>
+3）qnorm(0.5)则得到的是0，即标准正态分布在p=0.5处的分位数是0<br>
 4）rnorm(n)则是按正态分布随机产生n个数据。</p>
 </blockquote>
 <h2 id="bernoulli-random-variables">Bernoulli Random Variables</h2>
@@ -472,7 +472,7 @@ results &lt;- replicate(5,{
 [6,] 100.36274 101.5734  99.90890 100.36490 102.5956
 </div></code></pre>
 <h2 id="%E5%88%86%E6%9E%90">分析</h2>
-<h3 id="1-rep%E4%B8%8Ereplicatebr">1. rep()与replicate()<br></h3>
+<h3 id="1-rep%E4%B8%8Ereplicatebr">1. <strong>rep()与replicate()<br></strong></h3>
 <blockquote>
 <p>rep()函数把输入的参数重复多次，如果参数是表达式，rep()函数会把表达式的结果重复多次<br>
 replicate()函数是重复调用表达式，每次调用表达式的过程都是独立的</p>

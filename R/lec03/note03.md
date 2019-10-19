@@ -1,4 +1,4 @@
-> &#10084;Author: chenshuo
+> &#9730;Author: chenshuo
 # loop&if&function
 ## for 
 ```

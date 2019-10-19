@@ -1,4 +1,4 @@
-> &#10084;Author: chenshuo
+> &#9730;Author: chenshuo
 # 绘图
 - 参数太多懒得写
 # 简单统计
@@ -21,13 +21,6 @@
 1     setosa       3.428
 2 versicolor       2.770
 3  virginica       2.974
-```
-```
-> aggregate(Sepal.Length~Species,iris,mean)
-     Species Sepal.Length
-1     setosa        5.006
-2 versicolor        5.936
-3  virginica        6.588
 ```
 - aggregate(cbind(a,b)~c,dataset,function)<br>按dataset中的c列进行分组，用function对a，b两列分别统计
 ```
@@ -60,10 +53,12 @@
 5  10.7     81   18.8
 6  10.8     83   19.7
 ```
+计算两列协方差
 ```
 > cov(trees$Height,trees$Volume)
 [1] 62.66
 ```
+计算协方差矩阵
 ```
 > cov(trees)
            Girth   Height    Volume

@@ -1,5 +1,6 @@
+> &#10084;Author: chenshuo
 # 绘图
-- 略
+- 参数太多懒得写
 # 简单统计
 ## aggregate
 - 分组统计

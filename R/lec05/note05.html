@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS": {"availableFonts":["TeX"],"scale": 150}});</script>
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+</style>
+
+</head>
+<body>
+<blockquote>
+<p>❤Author: chenshuo</p>
+</blockquote>
+<h1 id="%E6%A8%A1%E6%8B%9F%E5%85%B6%E4%BB%96%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F">模拟其他随机变量</h1>
+<blockquote>
+<p>R语言中提供了四类有关统计分布的函数（密度函数，累计分布函数，分位函数，随机数函数）。分别在代表该分布的R函数前加上相应前缀获得(d，p，q，r)。如：<br>
+1）正态分布的函数是norm，命令dnorm(0)就可以获得正态分布的密度函数在0处的值(0.3989)(默认为标准正态分布)。<br>
+2）pnorm(0)是0.5就是正态分布的累计密度函数在0处的值。<br>
+3）qnorm(0.5)则得到的是0，即标准正态分布在0.5处的分位数是0（在来个比较常用的：qnorm(0.975)就是那个估计中经常用到的1.96了）。<br>
+4）rnorm(n)则是按正态分布随机产生n个数据。</p>
+</blockquote>
+<h2 id="bernoulli-random-variables">Bernoulli Random Variables</h2>
+<pre class="hljs"><code><div>&gt; set.seed(23207)
+&gt; guesses &lt;- runif(20)
+&gt; correct.answers &lt;- (guesses &lt; 0.2)
+&gt; correct.answers
+ [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE
+ [9]  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE
+[17] FALSE FALSE FALSE  TRUE
+</div></code></pre>
+<pre class="hljs"><code><div>&gt; table(correct.answers)
+correct.answers
+FALSE  TRUE 
+   14     6 
+</div></code></pre>
+<h2 id="binomial-random-variables">Binomial Random Variables</h2>
+<h3 id="%E8%AE%A1%E7%AE%97pxx">计算p(X=x)</h3>
+<ul>
+<li>dbinom(x, size, prob)</li>
+<li>x 是成功的次数，prob是成功的概率，size是实验的次数</li>
+</ul>
+<pre class="hljs"><code><div>&gt; dbinom(x = 4, size = 6, prob = 0.5)
+[1] 0.234375
+</div></code></pre>
+<h3 id="%E8%AE%A1%E7%AE%97px-x">计算p(X &lt;= x)</h3>
+<ul>
+<li>pbinom(x , size, prob)</li>
+<li>x 是成功的次数，prob是成功的概率，size是实验的次数</li>
+</ul>
+<pre class="hljs"><code><div>&gt; pbinom(4, 6, 0.5)
+[1] 0.890625
+</div></code></pre>
+<h3 id="%E8%AE%A1%E7%AE%97binomial%E5%88%86%E5%B8%83%E7%9A%84%E5%88%86%E4%BD%8D%E6%95%B0">计算binomial分布的分位数</h3>
+<ul>
+<li>qbinom(p1, size, p2)</li>
+<li>size是实验的次数，p2是成功的概率，p1是成功x次的概率</li>
+<li>输出是成功的次数x</li>
+</ul>
+<pre class="hljs"><code><div>&gt; qbinom(0.89, 6, 0.5)
+[1] 4
+</div></code></pre>
+<h3 id="%E4%BA%A7%E7%94%9F%E9%9A%8F%E6%9C%BAbinomial%E7%8B%AC%E7%AB%8B%E5%90%8C%E5%88%86%E5%B8%83%E5%BA%8F%E5%88%97">产生随机binomial独立同分布序列</h3>
+<ul>
+<li>rbinom(n, size, prob)</li>
+</ul>
+<pre class="hljs"><code><div>&gt; rbinom(24, 15, 0.1)
+ [1] 1 2 2 2 1 0 1 2 2 1 2 3 1 0 1 0 1 0 3 2 2 1 0 2
+</div></code></pre>
+<h2 id="possion-random-variables">Possion Random Variables</h2>
+<ul>
+<li>dpois</li>
+<li>ppois</li>
+<li>qpois</li>
+<li>rpois</li>
+</ul>
+<h2 id="exponential-random-variables">Exponential Random Variables</h2>
+<ul>
+<li>dexp</li>
+<li>pexp</li>
+<li>qexp</li>
+<li>rexp</li>
+</ul>
+<h2 id="%E5%85%B6%E4%BB%96%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0">其他内置函数</h2>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/R/其他内置函数01.png" alt="01">
+<img src="file:///d:/001private/pku/my_notes/my_notes/img/R/其他内置函数02.png" alt="02"></p>
+<h1 id="%E5%A4%9A%E5%85%83%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90">多元随机数生成</h1>
+<h2 id="%E7%A4%BA%E4%BE%8B">示例</h2>
+<pre class="hljs"><code><div>X &lt;- numeric(6)
+X[1] &lt;- 100
+results &lt;- replicate(5,{
+  for (t in 1:5)
+    X[t+1] &lt;- X[t]*exp(rnorm(1,mean = 0, sd = log(1.01)))
+  X
+})
+</div></code></pre>
+<pre class="hljs"><code><div>&gt; results
+          [,1]     [,2]      [,3]      [,4]     [,5]
+[1,] 100.00000 100.0000 100.00000 100.00000 100.0000
+[2,]  99.75338 100.1620  99.58463 100.15686 100.7607
+[3,] 102.30194 100.2097  99.02311  99.04906 101.5106
+[4,] 100.52979 100.7057 100.27112  98.13373 102.0750
+[5,] 101.16904 101.3107  99.45417  99.68271 103.3740
+[6,] 100.36274 101.5734  99.90890 100.36490 102.5956
+</div></code></pre>
+<h2 id="%E5%88%86%E6%9E%90">分析</h2>
+<h3 id="1-rep%E4%B8%8Ereplicatebr">1. rep()与replicate()<br></h3>
+<blockquote>
+<p>rep()函数把输入的参数重复多次，如果参数是表达式，rep()函数会把表达式的结果重复多次<br>
+replicate()函数是重复调用表达式，每次调用表达式的过程都是独立的</p>
+</blockquote>
+<pre class="hljs"><code><div>&gt; rep(runif(1),5)
+[1] 0.8721105 0.8721105 0.8721105 0.8721105 0.8721105
+</div></code></pre>
+<pre class="hljs"><code><div>&gt; replicate(5,runif(1))
+[1] 0.9426709 0.1280271 0.1926333 0.7091503 0.5404846
+</div></code></pre>
+<h3 id="2-%E6%8B%86%E5%88%86">2. 拆分</h3>
+<pre class="hljs"><code><div>X &lt;- numeric(6)
+X[1] &lt;- 100
+results &lt;- replicate(5,{
+  for (t in 1:5)
+    X[t+1] &lt;- X[t]+1
+X+2
+})
+</div></code></pre>
+<pre class="hljs"><code><div>&gt; results
+     [,1] [,2] [,3] [,4] [,5]
+[1,]  102  102  102  102  102
+[2,]  103  103  103  103  103
+[3,]  104  104  104  104  104
+[4,]  105  105  105  105  105
+[5,]  106  106  106  106  106
+[6,]  107  107  107  107  107
+</div></code></pre>
+<h3 id="3-%E8%BF%9B%E4%B8%80%E6%AD%A5%E6%8B%86%E5%88%86">3. 进一步拆分</h3>
+<pre class="hljs"><code><div>&gt; for (t in 1:5)
++ {X[t+1] &lt;- X[t]+1}
+&gt; X+2
+[1] 102 103 104 105 106 107
+</div></code></pre>
+<h3 id="4-%E7%BB%93%E8%AE%BA">4. 结论</h3>
+<p>❤将x[ ]中的元素随机化，然后以列扩展为5列,每次扩展的随机化之间独立</p>
+<h1 id="%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E9%93%BE%E6%A8%A1%E6%8B%9F">马尔科夫链模拟</h1>
+<p>❄本章后面略略略略</p>
+
+</body>
+</html>

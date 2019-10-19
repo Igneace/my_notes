@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS": {"availableFonts":["TeX"],"scale": 150}});</script>
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+</style>
+
+</head>
+<body>
+<blockquote>
+<p>☂Author: chenshuo</p>
+</blockquote>
+<h1 id="r%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B2%A1%E5%92%8B%E7%94%A8%E8%BF%87">R常用命令(没咋用过)</h1>
+<ul>
+<li>观察内置数据：data()</li>
+<li>设置工作目录：setwd(&quot;路径名&quot;)</li>
+<li>罗列会话对象:ls()</li>
+<li>删除对象：rm(xx)</li>
+<li>运行源代码:source(&quot;xxx&quot;)</li>
+<li>退出：q()</li>
+</ul>
+<h1 id="r%E7%9A%84%E5%91%BD%E5%90%8D%E5%AD%98%E5%82%A8-%E4%B8%8E">R的命名存储:= 与&lt;-</h1>
+<p>函数传参时用&quot;=&quot;,一般赋值运算&quot;&lt;-&quot;与&quot;=&quot;均可</p>
+<h1 id="%E5%90%91%E9%87%8F">向量</h1>
+<h2 id="%E5%90%91%E9%87%8F%E5%88%9B%E5%BB%BA">向量创建</h2>
+<pre class="hljs"><code><div>x&lt;-c(0,7,8)
+y &lt;- 3:10
+z = c(x,y)
+</div></code></pre>
+<h3 id="seq">seq</h3>
+<pre class="hljs"><code><div>seq(1, 20, by=3)                 
+[1] 1 4 7 10 13 16 19
+</div></code></pre>
+<h3 id="repxsthlentimes"><strong>rep(x,sth,len,times)</strong></h3>
+<blockquote>
+<ol>
+<li>x是要重复的vector/number</li>
+<li>sth（只是便于理解用，不能写“sth = ”）可以是<br> 1)number: 1,2,3...<br>2)vector: c( ) &amp; 1:n<br>3)each</li>
+<li>times是将前面的整体重复n次</li>
+<li>rep()与replicate()区别见后</li>
+</ol>
+</blockquote>
+<ul>
+<li>x是要重复的vector/number</li>
+</ul>
+<pre class="hljs"><code><div>&gt; rep(4,2)
+[1] 4 4
+&gt; rep(1:4,2)
+[1] 1 2 3 4 1 2 3 4
+&gt; rep(seq(1,8,by = 2),2)
+[1] 1 3 5 7 1 3 5 7
+</div></code></pre>
+<ul>
+<li>sth可以是数字和向量</li>
+</ul>
+<pre class="hljs"><code><div>&gt; rep(1:4,c(1,2,1,2))
+[1] 1 2 2 3 4 4
+&gt; rep(1:8,rep(1:4,2))
+ [1] 1 2 2 3 3 3 4 4 4 4 5 6 6 7 7 7 8 8 8 8
+&gt; rep(1:4,1:4)
+ [1] 1 2 2 3 3 3 4 4 4 4
+</div></code></pre>
+<ul>
+<li>sth可以是each</li>
+</ul>
+<pre class="hljs"><code><div>&gt; rep(1:4,each = 2)
+[1] 1 1 2 2 3 3 4 4
+</div></code></pre>
+<ul>
+<li>len与times</li>
+</ul>
+<pre class="hljs"><code><div>&gt; rep(1:4,each = 2,len =4)
+[1] 1 1 2 2
+&gt; rep(1:4, each = 2, len = 10)
+ [1] 1 1 2 2 3 3 4 4 1 1
+&gt; rep(1:4, each = 2, times = 3)
+ [1] 1 1 2 2 3 3 4 4 1 1 2 2 3 3 4 4 1 1 2 2 3 3 4 4
+</div></code></pre>
+<h3 id="samplex-size-replace-false-prob-null"><strong>sample(x, size, replace = FALSE, prob = NULL)</strong></h3>
+<ul>
+<li>x = n 等价于 x = 1:n</li>
+</ul>
+<pre class="hljs"><code><div>&gt; sample(x = 5, size = 5)
+[1] 2 4 3 5 1
+&gt; sample(x = 1:5, size = 5)
+[1] 2 1 4 5 3
+</div></code></pre>
+<ul>
+<li>x 也可以是字符向量</li>
+</ul>
+<pre class="hljs"><code><div>&gt; sample(x = c('a','b','c','d','e'),size = 5)
+[1] &quot;d&quot; &quot;a&quot; &quot;c&quot; &quot;b&quot; &quot;e&quot;
+</div></code></pre>
+<ul>
+<li>replace = T放回抽样。缺省值FALSE</li>
+</ul>
+<pre class="hljs"><code><div>&gt; sample(x = 1:5, size = 5, replace = T)
+[1] 4 3 5 2 3
+</div></code></pre>
+<ul>
+<li>prob代表x中对应元素被抽取的概率，相互是独立的，概率之和不需要为1</li>
+</ul>
+<pre class="hljs"><code><div>&gt; a &lt;- sample(x = 1:5, size = 5000, replace = T, prob = c(0.4, 0.4, 0.7, 0.1, 0.1))
+&gt; table(a)
+a
+   1    2    3    4    5 
+1203 1167 2027  310  293 
+</div></code></pre>
+<h2 id="%E5%90%91%E9%87%8F%E6%9F%A5%E8%AF%A2">向量查询</h2>
+<pre class="hljs"><code><div>z[2]
+z[c(1, 4, 5)]
+z[2 : 4]
+z[-c(1, 3, 4)]  #去掉第1，3，4位置剩下的
+</div></code></pre>
+<h2 id="%E5%90%91%E9%87%8F%E7%9A%84%E6%95%B0%E5%AD%A6%E8%BF%90%E7%AE%97">向量的数学运算</h2>
+<pre class="hljs"><code><div>y &lt;- z^ 2  #z向量中每个元素求平方  
+
+a&lt;-c(1,2,3)
+b&lt;-c(3,2,1)
+y &lt;- a^ b   #  向量对应元素进行计算
+y
+[1] 1 4 3
+</div></code></pre>
+<ul>
+<li>向量长度不对等的运算，短的向量循环运算</li>
+</ul>
+<h2 id="%E5%AD%97%E7%AC%A6%E5%90%91%E9%87%8F">字符向量</h2>
+<h3 id="%E5%88%9B%E5%BB%BA">创建</h3>
+<pre class="hljs"><code><div>colors &lt;- c(&quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;)  
+</div></code></pre>
+<h3 id="%E6%8F%90%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6-substrx-start-stop">提取字符串中的字符  substr(x, start, stop)</h3>
+<pre class="hljs"><code><div>substr(colors, 1, 2)       
+[1] &quot;re&quot; &quot;ye&quot; &quot;bl&quot;
+</div></code></pre>
+<h3 id="paste%E5%B0%86flowers-%E6%8B%BC%E6%8E%A5%E5%88%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%90%91%E9%87%8F%E4%B8%AD%E7%9A%84%E6%AF%8F%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%AD">paste将flowers 拼接到字符串向量中的每个字符中</h3>
+<pre class="hljs"><code><div>paste(colors, &quot;flowers&quot;)     
+[1] &quot;red flowers&quot; &quot;yellow flowers&quot; &quot;blue flowers&quot;
+</div></code></pre>
+<h1 id="factors">Factors</h1>
+<h2 id="%E5%88%9B%E5%BB%BA-factorx-character-levels">创建 factor(x = character(), levels)</h2>
+<pre class="hljs"><code><div>&gt; grp &lt;- factor(c(&quot;control&quot;,&quot;treatment&quot;,&quot;control&quot;,&quot;treatment&quot;))
+&gt; grp
+[1] control   treatment control   treatment
+Levels: control treatment
+</div></code></pre>
+<h2 id="levels%E7%9A%84%E7%94%A8%E6%B3%95">levels的用法</h2>
+<h3 id="%E6%A0%87%E7%AD%BE%E6%9F%A5%E8%AF%A2">标签查询</h3>
+<pre class="hljs"><code><div>&gt; levels(grp)
+[1] &quot;control&quot;   &quot;treatment&quot;
+</div></code></pre>
+<ul>
+<li>as.integer查询factor对象内部整数编码</li>
+</ul>
+<pre class="hljs"><code><div>&gt; levels(grp)[as.integer(grp)]                           
+[1] &quot;control&quot;   &quot;treatment&quot; &quot;control&quot;   &quot;treatment&quot;
+</div></code></pre>
+<h3 id="%E6%A0%87%E7%AD%BE%E6%9B%B4%E6%94%B9">标签更改</h3>
+<pre class="hljs"><code><div>&gt; levels(grp)[1] &lt;- &quot;placebo&quot;                            
+&gt; grp
+[1] placebo   treatment placebo   treatment
+Levels: placebo treatment
+</div></code></pre>
+<h1 id="%E7%9F%A9%E9%98%B5%E8%AF%A6%E8%A7%81lec6%E4%B8%8E%E6%95%B0%E7%BB%84">矩阵(详见lec6)与数组</h1>
+<h2 id="%E7%9F%A9%E9%98%B5%E5%88%9B%E5%BB%BA">矩阵创建</h2>
+<pre class="hljs"><code><div>&gt; m &lt;- matrix(1:6,nrow =2,ncol =3)
+&gt; m
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
+</div></code></pre>
+<h2 id="%E7%9F%A9%E9%98%B5%E6%9F%A5%E8%AF%A2">矩阵查询</h2>
+<pre class="hljs"><code><div>&gt; m[2,3]
+[1] 6
+&gt; m[1,]
+[1] 1 3 5
+&gt; m[,2]
+[1] 3 4
+
+</div></code></pre>
+<h2 id="%E6%95%B0%E7%BB%84%E5%88%9B%E5%BB%BA">数组创建</h2>
+<pre class="hljs"><code><div>&gt; a &lt;- array(1:24, c(3,4,2))
+&gt; a
+, , 1
+
+     [,1] [,2] [,3] [,4]
+[1,]    1    4    7   10
+[2,]    2    5    8   11
+[3,]    3    6    9   12
+
+, , 2
+
+     [,1] [,2] [,3] [,4]
+[1,]   13   16   19   22
+[2,]   14   17   20   23
+[3,]   15   18   21   24
+</div></code></pre>
+<h2 id="%E6%95%B0%E7%BB%84%E6%9F%A5%E8%AF%A2">数组查询</h2>
+<pre class="hljs"><code><div>&gt; a[1,2,2]
+[1] 16
+&gt; a[1,1,]
+[1]  1 13
+&gt; a[1,,]
+     [,1] [,2]
+[1,]    1   13
+[2,]    4   16
+[3,]    7   19
+[4,]   10   22
+</div></code></pre>
+
+</body>
+</html>

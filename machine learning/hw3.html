@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS": {"availableFonts":["TeX"],"scale": 150}});</script>
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96">数据标准化</h1>
+<h2 id="n%E4%B8%8En1">(n,)与(n,1)</h2>
+<h3 id="%E9%97%AE%E9%A2%98%EF%BC%9A%E8%B0%83%E7%94%A8standardscalerscore%E5%87%BD%E6%95%B0%E6%8A%A5%E9%94%99">问题：调用standardscaler(score)函数报错</h3>
+<pre class="hljs"><code><div>score = df_new['Compound_multiplied'].values
+</div></code></pre>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/error01.png" alt="error01">
+<img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/01.png" alt="01"></p>
+<h3 id="%E8%A7%A3%E5%86%B3">解决</h3>
+<pre class="hljs"><code><div>1. score = df_new['Compound_multiplied'].values.reshape(-1,1)
+</div></code></pre>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/02.png" alt="02"></p>
+<pre class="hljs"><code><div>2. score = df_new[['Compound_multiplied']].values
+</div></code></pre>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/03.png" alt="03"></p>
+<h2 id="%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E6%96%B9%E6%B3%95">几种不同的标准化方法</h2>
+<pre class="hljs"><code><div>    def method1(score):
+        #Z - score标准化方法  ;
+        scaler = StandardScaler().fit(score)  # 保存标准化参数
+        scaled_data = scaler.transform(score)
+        return scaled_data
+</div></code></pre>
+<pre class="hljs"><code><div>    def method2(x):
+    
+        #结果与method1相同
+
+        scaled_data = preprocessing.scale(x)
+        return scaled_data
+</div></code></pre>
+<pre class="hljs"><code><div>    def method3(x):
+
+        #standardscaler2的实现
+        
+        x = (x - np.mean(x)) / np.std(x)
+        return x
+</div></code></pre>
+<pre class="hljs"><code><div>    def method4(x):
+
+        #Mean normalization
+
+        x = (x - np.mean(x)) / (np.max(x) - np.min(x))
+        return x
+</div></code></pre>
+<h1 id="sentimentscore%E7%9A%84%E8%BE%93%E5%85%A5">sentimentScore的输入</h1>
+<pre class="hljs"><code><div>1) x = df['Tweet content'].values.tolist()
+2) x = df['Tweet content']
+
+sentimentScore(x)
+
+</div></code></pre>
+<h1 id="group-bymean">group by.mean()</h1>
+<h3 id="%E8%87%AA%E5%8A%A8%E5%89%94%E9%99%A4%E9%9D%9E%E6%95%B0%E5%80%BC%E5%9E%8B%E6%95%B0%E6%8D%AE">自动剔除非数值型数据</h3>
+<pre class="hljs"><code><div># df_new = df_new.drop(['Hour','Tweet content','Hashtags','Symbols'], axis = 1)
+
+df_data_mean = df_new.groupby('Date').mean()
+</div></code></pre>
+<h1 id="%E6%8A%BD%E5%8F%9660%E5%A4%A9%E6%95%B0%E6%8D%AE">抽取60天数据</h1>
+<h2 id="1-%E8%AE%BE%E7%BD%AEindex%EF%BC%8Cloc">1. 设置index，loc</h2>
+<ul>
+<li>源文件时间降序
+<img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/date01.png" alt="date"></li>
+</ul>
+<h3 id="1%EF%BC%89%E6%94%B9%E4%B8%BA%E5%8D%87%E5%BA%8F">1）改为升序</h3>
+<pre class="hljs"><code><div>df_concat.sort_index(inplace = True) 
+</div></code></pre>
+<h3 id="2%EF%BC%89startdate%E4%B8%8Eenddate%E5%AF%B9%E8%B0%83">2）start_date与end_date对调</h3>
+<pre class="hljs"><code><div>df_concat.loc[e_date:s_date,:] 
+</div></code></pre>
+<pre class="hljs"><code><div>df_concat.sort_index(inplace = True) 
+</div></code></pre>
+<h2 id="2-date-column-%E7%B4%A2%E5%BC%95">2. Date column 索引</h2>
+<pre class="hljs"><code><div>df_concat[(df_concat['Date'] &gt;= '2016-04-01') &amp; (df_concat['Date'] &lt;= '2016-05-30')]
+</div></code></pre>
+<h1 id="%E6%A0%87%E5%87%86%E5%8C%96%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BD%9C%E7%94%A8">标准化数据的作用</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/origin.png" alt="or"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/std0.png" alt="std0"></td>
+</tr>
+<tr>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/std3.png" alt="std3"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/std4.png" alt="std4"></td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

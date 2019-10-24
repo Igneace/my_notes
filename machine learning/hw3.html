@@ -377,97 +377,182 @@ blockquote {
 
 </head>
 <body>
-<h1 id="%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96">数据标准化</h1>
-<h2 id="n%E4%B8%8En1">(n,)与(n,1)</h2>
-<h3 id="%E9%97%AE%E9%A2%98%EF%BC%9A%E8%B0%83%E7%94%A8standardscalerscore%E5%87%BD%E6%95%B0%E6%8A%A5%E9%94%99">问题：调用standardscaler(score)函数报错</h3>
-<pre class="hljs"><code><div>score = df_new['Compound_multiplied'].values
-</div></code></pre>
-<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/error01.png" alt="error01">
-<img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/01.png" alt="01"></p>
-<h3 id="%E8%A7%A3%E5%86%B3">解决</h3>
-<pre class="hljs"><code><div>1. score = df_new['Compound_multiplied'].values.reshape(-1,1)
-</div></code></pre>
-<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/02.png" alt="02"></p>
-<pre class="hljs"><code><div>2. score = df_new[['Compound_multiplied']].values
-</div></code></pre>
-<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/03.png" alt="03"></p>
-<h2 id="%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E6%96%B9%E6%B3%95">几种不同的标准化方法</h2>
-<pre class="hljs"><code><div>    def method1(score):
-        #Z - score标准化方法  ;
-        scaler = StandardScaler().fit(score)  # 保存标准化参数
-        scaled_data = scaler.transform(score)
-        return scaled_data
-</div></code></pre>
-<pre class="hljs"><code><div>    def method2(x):
-    
-        #结果与method1相同
-
-        scaled_data = preprocessing.scale(x)
-        return scaled_data
-</div></code></pre>
-<pre class="hljs"><code><div>    def method3(x):
-
-        #standardscaler2的实现
-        
-        x = (x - np.mean(x)) / np.std(x)
-        return x
-</div></code></pre>
-<pre class="hljs"><code><div>    def method4(x):
-
-        #Mean normalization
-
-        x = (x - np.mean(x)) / (np.max(x) - np.min(x))
-        return x
-</div></code></pre>
-<h1 id="sentimentscore%E7%9A%84%E8%BE%93%E5%85%A5">sentimentScore的输入</h1>
-<pre class="hljs"><code><div>1) x = df['Tweet content'].values.tolist()
-2) x = df['Tweet content']
-
-sentimentScore(x)
-
-</div></code></pre>
-<h1 id="group-bymean">group by.mean()</h1>
-<h3 id="%E8%87%AA%E5%8A%A8%E5%89%94%E9%99%A4%E9%9D%9E%E6%95%B0%E5%80%BC%E5%9E%8B%E6%95%B0%E6%8D%AE">自动剔除非数值型数据</h3>
-<pre class="hljs"><code><div># df_new = df_new.drop(['Hour','Tweet content','Hashtags','Symbols'], axis = 1)
-
-df_data_mean = df_new.groupby('Date').mean()
-</div></code></pre>
+<p>☂Author:chenshuo</p>
 <h1 id="%E6%8A%BD%E5%8F%9660%E5%A4%A9%E6%95%B0%E6%8D%AE">抽取60天数据</h1>
 <h2 id="1-%E8%AE%BE%E7%BD%AEindex%EF%BC%8Cloc">1. 设置index，loc</h2>
+<h3 id="%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9A%E6%8A%BD%E5%8F%96%E6%95%B0%E6%8D%AE%E5%90%8Edf%E4%B8%BA%E7%A9%BA">可能的问题：抽取数据后df为空</h3>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/date01.png" alt="date"></p>
+<h3 id="%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0%EF%BC%9A%E6%BA%90%E6%96%87%E4%BB%B6%E6%97%B6%E9%97%B4%E9%99%8D%E5%BA%8F">问题原因：源文件时间降序</h3>
+<h3 id="%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">解决方法</h3>
 <ul>
-<li>源文件时间降序
-<img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/date01.png" alt="date"></li>
+<li>改为升序</li>
 </ul>
-<h3 id="1%EF%BC%89%E6%94%B9%E4%B8%BA%E5%8D%87%E5%BA%8F">1）改为升序</h3>
 <pre class="hljs"><code><div>df_concat.sort_index(inplace = True) 
 </div></code></pre>
-<h3 id="2%EF%BC%89startdate%E4%B8%8Eenddate%E5%AF%B9%E8%B0%83">2）start_date与end_date对调</h3>
+<ul>
+<li>start_date与end_date对调</li>
+</ul>
 <pre class="hljs"><code><div>df_concat.loc[e_date:s_date,:] 
-</div></code></pre>
-<pre class="hljs"><code><div>df_concat.sort_index(inplace = True) 
 </div></code></pre>
 <h2 id="2-date-column-%E7%B4%A2%E5%BC%95">2. Date column 索引</h2>
 <pre class="hljs"><code><div>df_concat[(df_concat['Date'] &gt;= '2016-04-01') &amp; (df_concat['Date'] &lt;= '2016-05-30')]
 </div></code></pre>
-<h1 id="%E6%A0%87%E5%87%86%E5%8C%96%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BD%9C%E7%94%A8">标准化数据的作用</h1>
+<h1 id="%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96">数据标准化</h1>
+<h2 id="%E8%B0%83%E7%94%A8standardscalerscore%E5%87%BD%E6%95%B0%E6%8A%A5%E9%94%99">调用standardscaler(score)函数报错</h2>
+<h3 id="%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0">问题原因</h3>
+<pre class="hljs"><code><div>score = df_new['Compound_multiplied'].values
+</div></code></pre>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/error01.png" alt="error01">
+<img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/01.png" alt="01"></p>
+<h3 id="%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">解决方法</h3>
+<ul>
+<li>reshape(-1,1)</li>
+</ul>
+<pre class="hljs"><code><div>score = df_new['Compound_multiplied'].values.reshape(-1,1)
+</div></code></pre>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/02.png" alt="02"></p>
+<ul>
+<li>df[['column']]</li>
+</ul>
+<pre class="hljs"><code><div>score = df_new[['Compound_multiplied']].values
+</div></code></pre>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/03.png" alt="03"></p>
+<h2 id="%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E6%96%B9%E6%B3%95">几种不同的标准化方法</h2>
+<h3 id="standardscale">StandardScale</h3>
+<ul>
+<li>
+<p>原理</p>
+<p>$z=\frac{x-mean(x)}{std(x)}$</p>
+</li>
+<li>
+<p>调用</p>
+</li>
+</ul>
+<pre class="hljs"><code><div>def standard_scaler(score):                 
+    scaler = StandardScaler().fit(score)   #保存标准化参数
+    scaled_data = scaler.transform(score)
+    #scaled_data = StandardScaler().fit_transform(x)
+    return scaled_data
+</div></code></pre>
+<ul>
+<li>实现</li>
+</ul>
+<pre class="hljs"><code><div>def standard_scaler_1(x):          #实现StandardScaler
+    x = (x - np.mean(x,axis = 0)) / np.std(x, axis = 0)
+    return x
+</div></code></pre>
+<h3 id="minmaxscaler">MinMaxScaler</h3>
+<ul>
+<li>
+<p>原理</p>
+<p>$z=\frac{x-min(x)}{max(x)-min(x)}$</p>
+</li>
+<li>
+<p>调用</p>
+</li>
+</ul>
+<pre class="hljs"><code><div>def min_max_scaler(x):               #MinMaxScaler
+#     scaler = MinMaxScaler.fit(x)
+#     scaled_data = scaler.transform(x)
+    scaled_data = MinMaxScaler().fit_transform(x)
+    return scaled_data             #实现MinMaxScaler
+</div></code></pre>
+<ul>
+<li>实现</li>
+</ul>
+<pre class="hljs"><code><div>def min_max_scaler_1(x):
+    x = (x - np.min(x, axis = 0)) /(np.max(x, axis = 0) - np.min(x, axis = 0))
+    return x
+</div></code></pre>
+<h3 id="maxabsscaler">MaxAbsScaler</h3>
+<ul>
+<li>
+<p>原理</p>
+<p>$z=\frac{x}{max(x)}$</p>
+</li>
+<li>
+<p>调用</p>
+</li>
+</ul>
+<pre class="hljs"><code><div>def max_abs_scaler(x):          #MaxAbsScaler 
+    
+    scaled_data = MaxAbsScaler().fit_transform(x)
+
+#     scaler = preprocessing.MaxAbsScaler()
+#     scaled_data = scaler.fit_transform(x)
+  
+    return scaled_data
+</div></code></pre>
+<ul>
+<li>实现</li>
+</ul>
+<pre class="hljs"><code><div>def max_abs_scaler_1(x):         #实现MaxAbsScaler      
+    x = x / np.max(x,axis = 0)
+    return x
+</div></code></pre>
+<h3 id="%E6%9B%B4%E5%A4%9A%E6%96%B9%E6%B3%95">更多方法</h3>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/preprocessing.png" alt="sklearn"></p>
+<h2 id="%E4%B8%8D%E5%90%8C%E6%A0%87%E5%87%86%E5%8C%96%E6%96%B9%E6%B3%95%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E5%90%8E%E7%9A%84%E7%BB%93%E6%9E%9C">不同标准化方法处理数据后的结果</h2>
+<h2 id="%E4%B8%80%E7%BB%B4">一维</h2>
 <table>
 <thead>
 <tr>
-<th style="text-align:center"></th>
-<th style="text-align:center"></th>
+<th style="text-align:center">Compound_multiplied</th>
+<th style="text-align:center">StandardScale</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/origin.png" alt="or"></td>
-<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/std0.png" alt="std0"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/data0.png" alt="data0"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/data1.png" alt="data1"></td>
 </tr>
 <tr>
-<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/std3.png" alt="std3"></td>
-<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/std4.png" alt="std4"></td>
+<td style="text-align:center"><strong>MinMaxScaler</strong></td>
+<td style="text-align:center"><strong>MaxAbsScaler</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/data2.png" alt="data2"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/data3.png" alt="data3"></td>
 </tr>
 </tbody>
 </table>
+<h2 id="%E4%BA%8C%E7%BB%B4">二维</h2>
+<ul>
+<li>生成数据</li>
+</ul>
+<pre class="hljs"><code><div>X, y = make_blobs(n_samples=50, centers=2, random_state=4, cluster_std=1)
+</div></code></pre>
+<ul>
+<li>结果分析</li>
+</ul>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/Figure_1.png" alt="f1"></p>
+<h2 id="%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96%E7%9A%84%E4%BD%9C%E7%94%A8">数据标准化的作用</h2>
+<ul>
+<li>无量纲化，便于不同评价指标的比较</li>
+<li>弱化奇异值对模型的影响</li>
+<li>加快梯度下降求最优解的速度</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">未归一化</th>
+<th style="text-align:center">归一化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$J = (3\theta_{1} + 600\theta_{2} - y_{correct})^{2}$</td>
+<td style="text-align:center">$(0.5\theta_{1}+0.55\theta_{2}-y_{correct})^{2}$</td>
+</tr>
+<tr>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/梯度更新.png" alt="gradient"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/梯度更新2.png" alt="gradient2"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>来源：https://zhuanlan.zhihu.com/p/27627299</p>
+</blockquote>
 
 </body>
 </html>

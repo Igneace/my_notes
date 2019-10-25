@@ -1,5 +1,22 @@
 &#9730;Author:chenshuo
-# 抽取60天数据
+# 作业内容
+1. 读取 tweet 数据（AAL.xlsx → Stream → Tweet content）；
+2. 计算每条 tweet 的四种情感得分；
+3. 将得分作为新的数据列与 Stream 数据合并；
+<font color = 'red'>
+4. 选取任意连续 60 天的所有数据；</font>
+5. 将 Date 列转换为日期格式；
+6. 将新的日期设置为 index；
+7. 挑选出有价值的属性['Hour', 'Tweet content', 'Favs', 'RTs', 'Followers',
+'Following', 'Is a RT', 'Hashtags', 'Symbols', 'compound', 'neg', 'neu', 'pos']；
+8. 去掉 compound 的得分为 0（即中立）的数据；
+9. 去掉 Followers 为空的数据；
+10. 增加新的一列 Compound_multiplied，由 compound 和 Followers 相乘而来；
+<font color = 'red'>
+11. 将Compound_multiplied标准化，作为新的一列Compound_multiplied_scaled；</font>
+12. 计算每日所有数据的均值；
+13. 将均值结果保存为 excel 表
+# 抽取连续60天数据
 ## 1. 设置index，loc
 ### 可能的问题：抽取数据后df为空
 ![date](../img/python/19class/20191023/date01.png)
@@ -51,9 +68,9 @@ score = df_new[['Compound_multiplied']].values
 - 调用
 ```
 def standard_scaler(score):                 
-    scaler = StandardScaler().fit(score)   #保存标准化参数
+    scaler = StandardScaler().fit(score)   #先fit再transform，保存标准化转换器
     scaled_data = scaler.transform(score)
-    #scaled_data = StandardScaler().fit_transform(x)
+    #scaled_data = StandardScaler().fit_transform(x)   #更高效
     return scaled_data
 ```
 - 实现
@@ -84,7 +101,7 @@ def min_max_scaler_1(x):
 ### MaxAbsScaler
 - 原理  
   
-  $z=\frac{x}{max(x)}$
+  $z=\frac{x}{max(|x|)}$
 - 调用
 ```
 def max_abs_scaler(x):          #MaxAbsScaler 
@@ -129,4 +146,9 @@ X, y = make_blobs(n_samples=50, centers=2, random_state=4, cluster_std=1)
 | :-: | :-: |
 |$J = (3\theta_{1} + 600\theta_{2} - y_{correct})^{2}$|$(0.5\theta_{1}+0.55\theta_{2}-y_{correct})^{2}$
 | ![gradient](../img/python/19class/20191023/梯度更新.png)|![gradient2](../img/python/19class/20191023/梯度更新2.png)
-> 来源：https://zhuanlan.zhihu.com/p/27627299
+
+
+
+参考资料
+>《python机器学习基础教程》——人民邮电出版社 <br>
+>知乎：https://zhuanlan.zhihu.com/p/27627299  

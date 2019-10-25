@@ -378,7 +378,26 @@ blockquote {
 </head>
 <body>
 <p>☂Author:chenshuo</p>
-<h1 id="%E6%8A%BD%E5%8F%9660%E5%A4%A9%E6%95%B0%E6%8D%AE">抽取60天数据</h1>
+<h1 id="%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AE%B9">作业内容</h1>
+<ol>
+<li>读取 tweet 数据（AAL.xlsx → Stream → Tweet content）；</li>
+<li>计算每条 tweet 的四种情感得分；</li>
+<li>将得分作为新的数据列与 Stream 数据合并；
+<font color = 'red'></li>
+<li>选取任意连续 60 天的所有数据；</font></li>
+<li>将 Date 列转换为日期格式；</li>
+<li>将新的日期设置为 index；</li>
+<li>挑选出有价值的属性['Hour', 'Tweet content', 'Favs', 'RTs', 'Followers',
+'Following', 'Is a RT', 'Hashtags', 'Symbols', 'compound', 'neg', 'neu', 'pos']；</li>
+<li>去掉 compound 的得分为 0（即中立）的数据；</li>
+<li>去掉 Followers 为空的数据；</li>
+<li>增加新的一列 Compound_multiplied，由 compound 和 Followers 相乘而来；
+<font color = 'red'></li>
+<li>将Compound_multiplied标准化，作为新的一列Compound_multiplied_scaled；</font></li>
+<li>计算每日所有数据的均值；</li>
+<li>将均值结果保存为 excel 表</li>
+</ol>
+<h1 id="%E6%8A%BD%E5%8F%96%E8%BF%9E%E7%BB%AD60%E5%A4%A9%E6%95%B0%E6%8D%AE">抽取连续60天数据</h1>
 <h2 id="1-%E8%AE%BE%E7%BD%AEindex%EF%BC%8Cloc">1. 设置index，loc</h2>
 <h3 id="%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9A%E6%8A%BD%E5%8F%96%E6%95%B0%E6%8D%AE%E5%90%8Edf%E4%B8%BA%E7%A9%BA">可能的问题：抽取数据后df为空</h3>
 <p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191023/date01.png" alt="date"></p>
@@ -429,14 +448,40 @@ blockquote {
 </li>
 </ul>
 <pre class="hljs"><code><div>def standard_scaler(score):                 
-    scaler = StandardScaler().fit(score)   #保存标准化参数
+    scaler = StandardScaler().fit(score)   #先fit再transform，保存标准化转换器
     scaled_data = scaler.transform(score)
-    #scaled_data = StandardScaler().fit_transform(x)
+    #scaled_data = StandardScaler().fit_transform(x)   #更高效
     return scaled_data
 </div></code></pre>
 <ul>
 <li>实现</li>
 </ul>
+<h4 id="npmeanx">np.mean(x)</h4>
+<pre class="hljs"><code><div>def standard_scaler_1(x):          
+    x = (x - np.mean(x)) / np.std(x)
+    return x
+</div></code></pre>
+<h4 id="%E5%AE%9E%E9%AA%8C">实验</h4>
+<pre class="hljs"><code><div>x = np.array([[-1,1],
+             [-2,2],
+             [-3,4]])
+</div></code></pre>
+<pre class="hljs"><code><div>MaxAbsScaler().fit_transform(x)
+array([[-0.33333333,  0.25      ],
+       [-0.66666667,  0.5       ],
+       [-1.        ,  1.        ]])
+</div></code></pre>
+<pre class="hljs"><code><div>x / np.max(np.abs(x))
+array([[-0.25,  0.25],
+       [-0.5 ,  0.5 ],
+       [-0.75,  1.  ]])
+</div></code></pre>
+<pre class="hljs"><code><div>x / np.max(np.abs(x), axis = 0)
+array([[-0.33333333,  0.25      ],
+       [-0.66666667,  0.5       ],
+       [-1.        ,  1.        ]])
+</div></code></pre>
+<h4 id="npmeanxaxis-0">np.mean(x,axis = 0)</h4>
 <pre class="hljs"><code><div>def standard_scaler_1(x):          #实现StandardScaler
     x = (x - np.mean(x,axis = 0)) / np.std(x, axis = 0)
     return x
@@ -468,7 +513,7 @@ blockquote {
 <ul>
 <li>
 <p>原理</p>
-<p>$z=\frac{x}{max(x)}$</p>
+<p>$z=\frac{x}{max(|x|)}$</p>
 </li>
 <li>
 <p>调用</p>
@@ -550,8 +595,10 @@ blockquote {
 </tr>
 </tbody>
 </table>
+<p>参考资料</p>
 <blockquote>
-<p>来源：https://zhuanlan.zhihu.com/p/27627299</p>
+<p>《python机器学习基础教程》——人民邮电出版社 <br>
+知乎：https://zhuanlan.zhihu.com/p/27627299</p>
 </blockquote>
 
 </body>

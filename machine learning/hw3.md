@@ -74,6 +74,37 @@ def standard_scaler(score):
     return scaled_data
 ```
 - 实现
+#### np.mean(x)
+```
+def standard_scaler_1(x):          
+    x = (x - np.mean(x)) / np.std(x)
+    return x
+```
+#### 实验
+```
+x = np.array([[-1,1],
+             [-2,2],
+             [-3,4]])
+```
+```
+MaxAbsScaler().fit_transform(x)
+array([[-0.33333333,  0.25      ],
+       [-0.66666667,  0.5       ],
+       [-1.        ,  1.        ]])
+```
+```
+x / np.max(np.abs(x))
+array([[-0.25,  0.25],
+       [-0.5 ,  0.5 ],
+       [-0.75,  1.  ]])
+```
+```
+x / np.max(np.abs(x), axis = 0)
+array([[-0.33333333,  0.25      ],
+       [-0.66666667,  0.5       ],
+       [-1.        ,  1.        ]])
+```
+#### np.mean(x,axis = 0)
 ```
 def standard_scaler_1(x):          #实现StandardScaler
     x = (x - np.mean(x,axis = 0)) / np.std(x, axis = 0)

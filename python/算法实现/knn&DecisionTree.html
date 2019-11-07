@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS": {"availableFonts":["TeX"],"scale": 150}});</script>
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+</style>
+
+</head>
+<body>
+<blockquote>
+<p>☂Author:陈烁</p>
+</blockquote>
+<h1 id="knn">KNN</h1>
+<h2 id="%E6%95%B0%E6%8D%AE%E4%B8%80%E4%B8%AAfeature%E6%95%B0%E6%8D%AE%E5%9C%A8lp%E8%B7%9D%E7%A6%BB%E6%97%B6%E4%B8%8D%E5%A5%BD%E8%AF%B4%E6%98%8E">数据(一个feature数据在$L_p$距离时不好说明)</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/X_train.png" alt="X_train"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/y_train.png" alt="y_train"></td>
+</tr>
+<tr>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/X_test.png" alt="X_test"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/y_test.png" alt="y_test"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9A">两个问题：</h2>
+<ul>
+<li>给定单个test sample，预测相应的label（分类）</li>
+<li>计算test dataset分类正确率</li>
+</ul>
+<h2 id="%E4%B8%A4%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%EF%BC%9A">两个函数的输入输出：</h2>
+<pre class="hljs"><code><div>    def predict(self, x_test): 
+        '''
+
+        :param x_test: ndarray (features_n,)
+        :return: predict_label , real number
+        '''
+</div></code></pre>
+<pre class="hljs"><code><div>    def score(self, X_test, y_test):
+        '''
+
+        :param X_test: ndarray, (test_size,feature_n)
+        :param y_test: ndarray, (test_size,)
+        :return: accuracy: real number
+        '''
+</div></code></pre>
+<h2 id="%E4%B8%A4%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0%EF%BC%9A">两个函数的实现：</h2>
+<h3 id="predict-function">predict function</h3>
+<blockquote>
+<p>预备补充知识</p>
+<ul>
+<li>监督学习基本假设：联合概率分布</li>
+<li>$P(Y|X)=\frac{P(X,Y)}{P(X)}$</li>
+<li>判别与生成</li>
+</ul>
+</blockquote>
+<h4 id="knn%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86">knn基本原理</h4>
+<ul>
+<li>选择距离最近的k个样本</li>
+<li>k个样本中频数最高的label作为$\hat{y}_{test}$</li>
+</ul>
+<h4 id="%E5%88%86%E6%9E%90%EF%BC%9A">分析：</h4>
+<ul>
+<li>谁和谁的距离:<br>
+x_test(features_n,)与X_train(train_size = m,features)的 m 个距离，选最近的k个距离</li>
+<li>距离怎么度量:<br>
+$(\sum_{l=1}^{n}|x_{i}^{(l)}-x_{j}^{(l)}|^{p})^{\frac{1}{p}} \Longrightarrow$np.linalg.norm()</li>
+</ul>
+<pre class="hljs"><code><div> distance = np.linalg.norm(x_test - self.X_train[i], ord = self.p)
+
+</div></code></pre>
+<ul>
+<li>怎么选出k个最近的样本（举个栗子解释）----搜索——两个for loop</li>
+</ul>
+<pre class="hljs"><code><div>knn_list = [] #存储(distance,label)
+</div></code></pre>
+<pre class="hljs"><code><div>        for i in range(self.n):
+
+            distance = np.linalg.norm(x_test - self.X_train[i], ord = self.p)
+
+            knn_list.append((distance, self.y_train[i]))
+
+</div></code></pre>
+<pre class="hljs"><code><div>        for i in range(self.n, len(self.X_train)):
+
+            distance = np.linalg.norm(x_test - self.X_train[i], ord=self.p)
+
+            #knn_list [(distance1,label1),(distance2,label2),...]
+
+            if max(knn_list, key=lambda x: x[0])[0] &gt; distance:
+                knn_list[knn_list.index(max(knn_list, key=lambda x: x[0]))] = (distance,self. y_train[i])
+</div></code></pre>
+<p><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/max.png" alt="max"></p>
+<blockquote>
+<p>Built-in Functions:https://docs.python.org/3/library/functions.html
+<img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/Built_in_functions.png" alt="Built_in_Functions"></p>
+</blockquote>
+<ul>
+<li>怎么统计：Counter</li>
+</ul>
+<pre class="hljs"><code><div>#knn_list [(distance1,label1),(distance2,label2),...(distance_k,label_k)]
+
+        knn_label = [x[-1] for x in knn_list] 
+
+#knn_label [label1,label2,...label_k]  
+
+        label_count = Counter(knn_label)   #Counter({label1:n1, label2:n2, ...})
+        predict_label = sorted(label_count.items(), key= lambda x: x[-1])[-1][0]   
+        #&lt;scaler variable&gt; C.items()convert to a list of (elem, cnt) pairs
+</div></code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/sorted.png" alt="sorted"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/list_comprehension.png" alt="list_comprehension"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>sorted:https://docs.python.org/release/3.7.4/howto/sorting.html#sortinghowto</p>
+</blockquote>
+<blockquote>
+<p>list_comprehension:https://docs.python.org/3.8/tutorial/datastructures.html#list-comprehensions</p>
+</blockquote>
+<blockquote>
+<p>Counter:https://docs.python.org/3/library/collections.html?highlight=counter#collections.Counter</p>
+</blockquote>
+<h3 id="score-function">score function</h3>
+<pre class="hljs"><code><div> def score(self,X_test, y_test):
+
+        correct_number = 0
+
+        for x, y in zip(X_test, y_test):
+
+            if  self.predict(x) == y:
+                correct_number += 1
+
+        accuracy = correct_number/len(X_test)   
+</div></code></pre>
+<blockquote>
+<p>zip:https://docs.python.org/3.8/library/functions.html#zip</p>
+</blockquote>
+<h3 id="final-version">final version</h3>
+<pre class="hljs"><code><div>class Knn:
+    def __init__(self, X_train, y_train, n_neighbors=5, p=2):
+        self.X_train = X_train
+        self.y_train = y_train
+        self.n = n_neighbors
+        self.p = p
+
+    def predict(self, x_test):
+        '''
+
+        :param x_test: ndarray (feature_n,)
+        :return: predict_label , real number
+        '''
+        knn_list = []
+
+        for i in range(self.n):
+            distance = np.linalg.norm(x_test - self.X_train[i], ord=self.p)
+
+            knn_list.append((distance, self.y_train[i]))
+
+        for i in range(self.n, len(self.X_train)):
+
+            distance = np.linalg.norm(x_test - self.X_train[i], ord=self.p)
+
+            if max(knn_list, key=lambda x: x[0])[0] &gt; distance:
+                knn_list[knn_list.index(max(knn_list, key=lambda x: x[0]))] = (distance,self. y_train[i])
+
+        knn_label = [x[-1] for x in knn_list]
+        label_count = Counter(knn_label)
+        predict_label = sorted(label_count.items(), key=lambda x: x[-1])[-1][0]   #高阶函数
+
+        return predict_label
+
+    def score(self, X_test, y_test):
+        '''
+
+        :param X_test: ndarray, (test_size,feature_n)
+        :param y_test: ndarray, (test_size,)
+        :return: accuracy: real number
+        '''
+
+        correct_number = 0
+
+        for x, y in zip(X_test, y_test):
+
+            if self.predict(x) == y:
+                correct_number += 1
+
+        accuracy = correct_number / len(X_test)
+
+        return accuracy
+
+</div></code></pre>
+<ul>
+<li>待改进与完善：搜索（感兴趣可实现）</li>
+</ul>
+<h1 id="decisiontree">DecisionTree</h1>
+<ul>
+<li>决策树——我的理解</li>
+<li>实现思路</li>
+<li>代码实现</li>
+</ul>
+<h2 id="%E5%86%B3%E7%AD%96%E6%A0%91%E6%98%AF%E4%BB%80%E4%B9%88">决策树是什么</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/dt_eg.png" alt="dt_eg"></td>
+<td style="text-align:center"><img src="file:///d:/001private/pku/my_notes/my_notes/img/python/19class/20191106/dt_data.png" alt="dt_data"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5">一些概念</h2>
+<h3 id="%E7%86%B5%E4%BF%A1%E6%81%AF%E8%AE%BA%EF%BC%9A">熵(信息论)：</h3>
+<ul>
+<li>$H(X) = \sum_{i=1}^{n}p_i(-logp_i)$</li>
+<li>平均信息量，熵越大，随机性越大</li>
+</ul>
+<h3 id="%E6%9D%A1%E4%BB%B6%E7%86%B5%E5%85%AC%E5%BC%8F%E7%95%A5%EF%BC%8C%E4%B8%BE%E4%BE%8B%E8%AE%A1%E7%AE%97-%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A%EF%BC%8Cid3c45cart%EF%BC%8C%E5%9F%BA%E5%B0%BC%E6%8C%87%E6%95%B0">条件熵(公式略，举例计算), 信息增益，ID3,C4.5,CART，基尼指数</h3>
+<pre class="hljs"><code><div>class Node():
+    def __init__(self):
+        self.label = None
+        self.ax = None
+        self.parent = None
+        self.children = {}
+
+
+
+class DecisionTree():
+
+    def __init__(self,epsilon = 0.1):
+        self.root = Node()
+        self.epsilon = epsilon
+
+    def entropy(self,labels):
+        y = Counter(labels)  # y[k] y_train中值为k的 数量
+        len_y = len(labels)
+
+        entropy_d = -sum([y[k] / len_y * log(y[k] / len_y, 2) for k in y.keys()]) # + 1e-10
+
+        return entropy_d
+
+    def cdt_entropy(self, ax, data, labels):
+
+        xc = Counter(data[:, ax])  # X_train某一列进行counter
+
+        sum = 0
+        for i, j in zip(xc.keys(), xc.values()):  # 遍历X_train中所有不同取值 i
+
+            tmp = j  # Di = j
+
+            idx = [x for x, y in enumerate(data) if y[ax] == i]  # 返回X_train中值为i的全部索引
+
+            label_counter = Counter(labels[idx])
+            sum1 = 0
+            for m, n in zip(label_counter.keys(), label_counter.values()):
+                sum1 += (n / tmp) * log(n / tmp, 2)
+
+            sum += tmp / len(labels) * sum1
+        cdt_entropy = - sum
+        return cdt_entropy
+
+    def info_gain(self,ax, data, labels):
+
+        return self.entropy(labels) - self.cdt_entropy(ax, data, labels)
+
+    def fqt_label(self,labels): #返回labels中频数最高的label
+
+        fqt = sorted(Counter(labels).items(), key = lambda x:x[-1])[-1][0]
+
+        return fqt
+
+
+    def bulid_tree(self, curr_node,sub_data,sub_labels,curr_axises):
+        '''
+        input: dataset, feature/axis, epsilon
+        output: T
+        :return:
+        '''
+
+
+        unique_label = list(set(sub_labels)) # unique label
+        #若所有实例属于同一类，单节点树，返回该label
+        if len(unique_label) == 1:
+            curr_node.label = unique_label[0]  #而非self.node
+            return
+        #若feature 为空，将dataset中label 频数最高的作为结点的label
+
+        if not curr_axises:
+            curr_node.label = self.fqt_label(sub_labels)
+            return
+
+        info_gain_list = []
+        for ax in curr_axises:  #获取每个feature的entropy; axises存储
+            info_gain = self.info_gain(ax, sub_data, sub_labels)
+            info_gain_list.append(info_gain)
+
+        if max(info_gain_list) &lt;self.epsilon:
+            curr_node.label = self.fqt_label(sub_labels)
+
+            return
+        idx = info_gain_list.index((max(info_gain_list)))  #max information gain indx
+        ag = curr_axises.pop(idx)  #ag = max information gain feature
+        curr_node.ax = ag     #记录当前用于分类的feature（max information gain）
+        ax_data = sub_data[:, ag] # subdataset when feature = ag(classify feature)
+        ax_unique = set(ax_data)
+
+        for ax in ax_unique:
+            tmp_idx = np.argwhere(ax_data == ax).flatten()
+            child_node = Node() #new empty Node
+            child_node.parent = curr_node
+            curr_node.children[ax] = child_node
+            child_labels = sub_labels[tmp_idx]   ###
+            child_data = sub_data[tmp_idx]      ###
+            self.bulid_tree(child_node,child_data,child_labels,curr_axises)
+        return
+
+    def fit(self, data, labels):
+        features = data.shape[1]  #features 总数
+        axies = list(range(features))          ########
+        self.bulid_tree(self.root, data, labels, axies)
+
+    def predict(self, test_data, test_labels):
+        counts = 0
+        test_size = test_labels.size
+        for i in range(test_size):  #遍历test样本
+            tmp_node = self.root
+            while tmp_node.children:
+                ax = tmp_node.ax
+                val = test_data[i, ax]
+                tmp_node = tmp_node.children[val]        #### continus variables
+            if tmp_node.label == test_labels[i]:
+                counts += 1
+        accuracy = format(counts / test_size, '.5f')
+
+        return accuracy
+</div></code></pre>
+<h1 id="%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%94%B6%E8%8E%B7%EF%BC%9A">算法实现的收获：</h1>
+
+</body>
+</html>
